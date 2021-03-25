@@ -1,0 +1,43 @@
+'''
+The following provides the pipeline and MATLAB code for processing mesh files (starting
+with STL files), which are then used for analyzing effects of breeding on bone midsections (analysis code in Analysis_code_microct.R), full shaft decile thickness analysis (analysis code in Analysis_code_microct.R) and for running the Euler Characteristic Transform predictive analysis (analysis code in 6_ECT_predictive_analysis/predictionscripts folder).
+'''
+
+1. In Avizo Lite, open original STL file and reduce to 100K faces. Export data as STL ascii. Optionally, take a screenshot and save into keynote to ensure all bone files look correct.
+
+2. Use meshlab to convert 100K stl file to off file. Check ‘none’ box when saving. 
+
+3. In textwrangler, edit file ~/Auto3dgm-matlab-master/code/jadd_path.m to specify input files to be aligned and output directory.
+
+4. In matlab, to autoalign the bones of the same bone type, type in Terminal:
+cd ~/Auto3dgm-matlab-master/code
+main
+
+#*Note that, if you want to rerun the above code on the same folder, you have to create a new folder.
+
+5. You will then need to extract the scaling factors, because Auto3dgm alignment output files are scaled to *different* factors! To get the scaling factors, find the “session.mat” file in the auto3dgm output folder, and drag it into matlab to load it. Type the following code in matlab:
+
+center = @(X) X-repmat(mean(X,2),1,size(X,2))
+format long g #so as not to round display value
+norm(center(ds.shape{1}.origV),'fro') #Where the number in brackets specifies the bone (alphabetical by default)
+
+6. Use Rhinoceros (we used version 6) to generate 2D midsection. In Rhino, open aligned .obj file. Make sure Ortho and Gumball are highlighted at the top. At bottom right corner, select persistent, midpoint, perpendicular. Back-scale the shape to its original size by clicking on the object, typing “scale”, hit enter for automatic base point, then type in the scaling factor, keeping all. Set horizontal lines at top and bottom of bone. Set vertical line connecting the two; type length with line selected and record bone length (if bone length is of interest). Set horizontal plane at the midpoint of vertical line and click on plane. In comment box, select MeshTrim and click the top of the bone to remove it. Click on the plane in top left quadrant, then click on the blue arrow (z axis) in the bottom left quadrant and set to -0.0001. While plane is still selected, type command flip (and hit enter). Then type the command Meshtrim and click the bottom of the bone to remove it. Click the outline of the bone midsection and export selected as AI, saving as high res (300ppi) and grayscale.
+
+6. Run the MomentMacro plugin in ImageJ.  Convert the AI image to TIF 300ppi grayscale. Open ImageJ on PC. Open TIF. Black out the background of midsection. Go to Image->Adjust->Threshold and adjust to 110 and 255. Do not apply. Highlight the bone with the magic tool. Go to  macro->moment calculation. Set to 300 pixels per inch, threshold 110 to 255. Run.
+
+
+#MATLAB code for processing STRADVIEW thickness outputs:
+
+#The following MATLAB code will read a thickness file created by Stradview, and give you results in the variable 't'. Save the variable 't' for analysis of femur decile thicknesses in R (analysis code in Analysis_code_microct.R).
+cd '~/Desktop/registration'
+fid = fopen("DVF007_smthick_dat.bin", 'r', 'a') ;
+fseek(fid, 256, 'bof');
+t = fread(fid, inf, 'double') ;
+fclose(fid);
+writematrix(t,'DVF007_thick.txt')
+
+#The following MATLAB code will read a surface in .ply format:
+surf = pcread("DVF007.ply");
+writematrix(t)
+writematrix(surf.Location)
+#After this, 'surf.Location' contains the list of points, in the same order as the data in 't' (presuming they are both based on the same surfaces).
