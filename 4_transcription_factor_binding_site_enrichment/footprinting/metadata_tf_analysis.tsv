@@ -1,0 +1,5 @@
+individual_id	condition	bam
+vertebrae	vertebrae_0	/project2/lbarreiro/users/Saideep/Rachel_TF_Analysis/vertebrae_1_vertebrae_0/footprinting/vertebrae_0_merged.sorted.bam
+longbones	longbones_0	/project2/lbarreiro/users/Saideep/Rachel_TF_Analysis/longbones_1_longbones_0/footprinting/longbones_0_merged.sorted.bam
+vertebrae	vertebrae_1	/project2/lbarreiro/users/Saideep/Rachel_TF_Analysis/vertebrae_1_vertebrae_0/footprinting/vertebrae_1_merged.sorted.bam
+longbones	longbones_1	/project2/lbarreiro/users/Saideep/Rachel_TF_Analysis/longbones_1_longbones_0/footprinting/longbones_1_merged.sorted.bam
