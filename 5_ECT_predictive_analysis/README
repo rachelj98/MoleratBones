@@ -1,0 +1,30 @@
+Author: Henry Kirveslahti
+
+This directory details the step for reproducing the Euler Characteristic Transform (ECT) predictive analysis.
+
+The analysis is divided into 3 different stages:
+
+1) Directory 'ECT_computation_scripts' contains the scripts for computing the Euler Characteristic Transform
+
+2) Directory 'data_processing' contains the scripts that compute the summary statistics from the Euler Characteristic Transform, and merges them with the labels.
+
+This step takes as the input the two folders
+"femora"
+and
+"vertrabrae"
+
+that contain the ECT curves computed in stage 1. *Note that these files are not .OFF files even if their name suggests so.  
+
+We also have the 2 .csv files that contain the data headers (whether or not the bone was from a queen)
+
+The scripts processing_femurs.R and processing_vertrabrae.R reproduce the two files .Rmd files "femurdata" and "LumbarData" that contain the data we fit our model with.
+
+3) The directory classification_scripts fits the SVM models to the data, and computes the p-values for the classification rates.
+
+It uses the two .Rmd files "femurdata" and "LumbarData" that were generated in step 2. There are 3 .R files in the main directory, one for each classification.
+
+Note that running these scripts is computationally expensive, so it is not recommended that one tries to run it in one go.
+
+For this reason, we store the classification rate for each permutation in a file.
+
+The script pvaluescript.R uses these files to compute the p-values from the classification rates. The same script is used for all of the analyses.
